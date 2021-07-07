@@ -1,4 +1,4 @@
-const btn = document.querySelector('button');
+const moves = document.querySelectorAll('button');
 const txt = document.querySelector('p');
 
 
@@ -11,20 +11,24 @@ function computerPlay() {
     let computerItem = choicesForGame[Math.floor(Math.random()*choicesForGame.length)];
     return computerItem;
 }
+function pressingButton() {
+    return moves.forEach(button => button.addEventListener('click', e => e.target.id));
+}
 
 function playerSelection() {
-    let playerItem = prompt("Select your move (Rock, Paper, Scissors):").toLowerCase();
+    let playerItem = pressingButton();
     return playerItem;
 }
+
 function winAndLoses(playerItem, computerItem) {
     switch (true) {
-        case playerItem === "rock" || playerItem === "r":
+        case playerItem === "Rock" || playerItem === "r":
             (computerItem === "Rock") ? null : (computerItem === "Paper") ? loses++ : wins++;
             break;
-        case playerItem === "paper" || playerItem === "p":
+        case playerItem === "Paper" || playerItem === "p":
             (computerItem === "Rock") ? wins++ : (computerItem === "Paper") ? null : loses++;
             break;
-        case playerItem === "scissors" || playerItem === "s":
+        case playerItem === "Scissors" || playerItem === "s":
             (computerItem === "Rock") ? loses++ : (computerItem === "Paper") ? wins++ : null;
             break;
     }
@@ -33,13 +37,13 @@ function winAndLoses(playerItem, computerItem) {
 function oneRound(playerItem, computerItem) {
     let message = "";
     switch (true) {
-        case playerItem === "rock" || playerItem === "r":
+        case playerItem === "Rock" || playerItem === "r":
             (computerItem === "Rock") ? message = "It's a Tie!!" : (computerItem === "Paper") ? message = "You lose. Paper beats Rock!!" : message = "You won!! Rock beats Scissors";
             break;
-        case playerItem === "paper" || playerItem === "p":
+        case playerItem === "Paper" || playerItem === "p":
             (computerItem === "Rock") ? message = "You won!! Paper beats Rock" : (computerItem === "Paper") ? message = "It's a Tie!!" : message = "You lose. Scissors beats Paper!!";
             break;
-        case playerItem === "scissors" || playerItem === "s":
+        case playerItem === "Scissors" || playerItem === "s":
             (computerItem === "Rock") ? message = "You lose. Rock beats Scissors!!" : (computerItem === "Paper") ? message = "You won!! Scissors beats Paper" : message = "It's a Tie!!";
             break;
         default:
@@ -48,7 +52,7 @@ function oneRound(playerItem, computerItem) {
     return message
 }
 
-btn.onclick = function game() {
+function game() {
     console.log("Welcome to the game, you decide your move by typing 'r'ock,'p'aper or 's'cissors.")
     while (wins !== 5 && loses !== 5) {
         let computerMove = computerPlay();
@@ -60,6 +64,8 @@ btn.onclick = function game() {
     wins = 0;
     loses = 0;
 }
+
+moves.forEach(button => button.addEventListener('click', game)); 
 
 
 
