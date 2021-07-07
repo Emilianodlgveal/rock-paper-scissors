@@ -82,8 +82,12 @@ function oneRound(playerMove) {
         newDiv = document.createElement('div');
         newDiv.textContent = ('Wins: ' + wins + ' Loses: ' + loses + ' Ties: ' + ties)
         result.appendChild(newDiv);
+        newDiv2 = document.createElement('div');
+        newDiv2.textContent = (playerMove + ' vs ' + computermove);
+        result.appendChild(newDiv2);
     } else {
         newDiv.textContent = ('Wins: ' + wins + ' Loses: ' + loses + ' Ties: ' + ties);
+        newDiv2.textContent = (playerMove + ' vs ' + computermove);
     }
     count++
     if (loses === 5) {
