@@ -108,6 +108,7 @@ restart.addEventListener('click', function restartfunc(){
     wins = 0;
     count = 0;
     result.removeChild(newDiv);
+    result.removeChild(newDiv2);
     result.removeChild(winLossDiv);
 });
 
