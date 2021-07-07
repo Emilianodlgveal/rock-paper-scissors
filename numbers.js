@@ -1,86 +1,109 @@
-const moves = document.querySelectorAll('button');
-const txt = document.querySelector('p');
-
-
-const choicesForGame = ["Rock", "Paper", "Scissors"];
+const moves = document.querySelectorAll('.move');
+const result = document.querySelector('#result')
+let count = 0;
 let wins = 0;
 let loses = 0;
+let ties = 0;
+
+// Player selection
+moves.forEach(move => move.addEventListener('click', function(e) {
+    let playerMove = e.target.textContent;
+    oneRound(playerMove = playerMove)
+}));
+//
 
 
-function computerPlay() {
-    let computerItem = choicesForGame[Math.floor(Math.random()*choicesForGame.length)];
-    return computerItem;
-}
-function pressingButton() {
-    return moves.forEach(button => button.addEventListener('click', e => e.target.id));
-}
-
-function playerSelection() {
-    let playerItem = pressingButton();
-    return playerItem;
-}
-
-function winAndLoses(playerItem, computerItem) {
+//Computer selection
+function computerSelection() {
+    let computermove = Math.floor(Math.random()*3)+1
     switch (true) {
-        case playerItem === "Rock" || playerItem === "r":
-            (computerItem === "Rock") ? null : (computerItem === "Paper") ? loses++ : wins++;
+        case computermove === 1:
+            computermove = 'Rock';
             break;
-        case playerItem === "Paper" || playerItem === "p":
-            (computerItem === "Rock") ? wins++ : (computerItem === "Paper") ? null : loses++;
+        case computermove === 2:
+            computermove = 'Paper';
             break;
-        case playerItem === "Scissors" || playerItem === "s":
-            (computerItem === "Rock") ? loses++ : (computerItem === "Paper") ? wins++ : null;
-            break;
-    }
-}
-
-function oneRound(playerItem, computerItem) {
-    let message = "";
-    switch (true) {
-        case playerItem === "Rock" || playerItem === "r":
-            (computerItem === "Rock") ? message = "It's a Tie!!" : (computerItem === "Paper") ? message = "You lose. Paper beats Rock!!" : message = "You won!! Rock beats Scissors";
-            break;
-        case playerItem === "Paper" || playerItem === "p":
-            (computerItem === "Rock") ? message = "You won!! Paper beats Rock" : (computerItem === "Paper") ? message = "It's a Tie!!" : message = "You lose. Scissors beats Paper!!";
-            break;
-        case playerItem === "Scissors" || playerItem === "s":
-            (computerItem === "Rock") ? message = "You lose. Rock beats Scissors!!" : (computerItem === "Paper") ? message = "You won!! Scissors beats Paper" : message = "It's a Tie!!";
+        case computermove === 3:
+            computermove = 'Scissors';
             break;
         default:
-            message = "Please enter a move"
-    }       
-    return message
-}
-
-function game() {
-    console.log("Welcome to the game, you decide your move by typing 'r'ock,'p'aper or 's'cissors.")
-    while (wins !== 5 && loses !== 5) {
-        let computerMove = computerPlay();
-        let playerMove = playerSelection();
-        winAndLoses(playerMove, computerMove);
-        console.log("Wins: " + wins + " Loses: " + loses);
-        console.log(oneRound(playerMove, computerMove));
+            computerSelection();
     }
-    wins = 0;
-    loses = 0;
+    return computermove
 }
 
-moves.forEach(button => button.addEventListener('click', game)); 
+function scoreReturner() {
+    return (wins, loses);
+}
 
+function winsOrLoses(playerMove, computermove) {
+    switch (true) {
+        case playerMove === 'Rock':
+            (computermove === 'Rock') ? ties++ : (computermove === 'Paper') ? loses++ : wins++;
+            break;
+        case playerMove === 'Paper':
+            (computermove === 'Paper') ? ties++ : (computermove === 'Scissors') ? loses++ : wins++;
+            break;
+        case playerMove === 'Scissors':
+            (computermove === 'Scissors') ? ties++ : (computermove === 'Rock') ? loses++ : wins++;
+            break;
+    }
+}
 
+function message() {
+    let message = '';
+    switch (true) {
+        case playerMove === 'Rock':
+            (computermove === 'Rock') ? message = 'Tie' : (computermove === 'Paper') ? message = 'Loss' : message = 'Won';
+            return message;
+        case playerMove === 'Paper':
+            (computermove === 'Paper') ? message = 'Tie' : (computermove === 'Scissors') ? message = 'Loss': message = 'Won';
+            return message;
+        case playerMove === 'Scissors':
+            (computermove === 'Scissors') ? message = 'Tie' : (computermove === 'Rock') ? message = 'Loss' : message = 'Won';
+            return message;
+    }
+}
 
+function stopGame(wins, loses) {
+    if (wins === 5 || loses === 5) {
+        return true
+    }
+}
 
+function oneRound(playerMove) {
+    if (wins === 5 || loses === 5) {
+        restartfunc()
+    }
+    let winLossDiv = document.createElement('div')
+    let computermove = computerSelection();
+    winsOrLoses(playerMove, computermove);
+    if (count === 0) {
+        newDiv = document.createElement('div');
+        newDiv.textContent = ('Wins: ' + wins + ' Loses: ' + loses + ' Ties: ' + ties)
+        result.appendChild(newDiv);
+    } else {
+        newDiv.textContent = ('Wins: ' + wins + ' Loses: ' + loses + ' Ties: ' + ties);
+    }
+    count++
+    if (loses === 5) {
+        winLossDiv.textContent = 'Youu loose!';
+        winLossDiv.setAttribute('id', 'winLossDiv');
+        result.appendChild(winLossDiv)
+    } else if (wins === 5) {
+        winLossDiv.textContent = 'Youu winn!';
+        winLossDiv.setAttribute('id', 'winLossDiv');
+        result.appendChild(winLossDiv);
+    }
+}
 
+const restart = document.querySelector('#restart');
+restart.addEventListener('click', function restartfunc(){
+    ties = 0;
+    loses = 0;
+    wins = 0;
+    count = 0;
+    result.removeChild(newDiv);
+    result.removeChild(winLossDiv);
+});
 
-
-
-
-// function updateBtn() {
-//     if (btn.textContent === 'Start machine') {
-//         btn.textContent = 'Stop machine';
-//         txt.textContent = 'The machine has started!';
-//     } else {
-//         btn.textContent = 'Start machine';
-//         txt.textContent = 'The machine is stopped.';
-//     }
-// }
